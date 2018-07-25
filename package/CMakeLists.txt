@@ -83,7 +83,8 @@ elseif("${KernelArch}" STREQUAL "arm")
         ALL DEPENDS
         "${IMAGE_NAME}"
         elfloader
-        ${rootservername})
+        ${rootservername}
+        ethdrivers)
 
     # WARNING - this will likely change as we migrate to a Rust project
     #
@@ -112,9 +113,11 @@ install(
     DIRECTORY
     $<TARGET_PROPERTY:sel4,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Configuration,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:ethdrivers,INTERFACE_INCLUDE_DIRECTORIES>
     DESTINATION .)
 
 install(
     FILES
     $<TARGET_FILE:sel4>
+    $<TARGET_FILE:ethdrivers>
     DESTINATION lib)
