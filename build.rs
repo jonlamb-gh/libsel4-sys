@@ -190,6 +190,7 @@ fn generate_bindings(fel4: &Fel4Config, include_path: PathBuf) {
         // These are implemented by this crate
         .blacklist_type("strcpy")
         .blacklist_type("__assert_fail")
+        .derive_debug(false)
         .clang_arg(target_args)
         .clang_arg(format!("-I{}", include_path.join("include").display()))
         .clang_arg(format!("-I{}", include_path.join(bindgen_include_config.kernel_arch).display()))

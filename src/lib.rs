@@ -38,10 +38,10 @@ impl ::core::fmt::Write for DebugOutHandle {
 
 #[no_mangle]
 pub unsafe extern "C" fn __assert_fail(
-    mstr: *const c_types::c_char,
-    file: *const c_types::c_char,
-    line: c_types::c_int,
-    function: *const c_types::c_char,
+    _mstr: *const c_types::c_char,
+    _file: *const c_types::c_char,
+    _line: c_types::c_int,
+    _function: *const c_types::c_char,
 ) {
     panic!("assertion failed");
 }
