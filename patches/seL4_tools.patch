@@ -1,0 +1,23 @@
+diff --git a/cmake-tool/common.cmake b/cmake-tool/common.cmake
+index 6ba5bd6..1f7e568 100644
+--- a/cmake-tool/common.cmake
++++ b/cmake-tool/common.cmake
+@@ -72,12 +72,13 @@ function(MakeCPIO output_name input_files)
+     CheckCPIOArgument(reproducible_flag)
+     set(append "")
+     foreach(file IN LISTS input_files)
+-        # Try and generate reproducible cpio meta-data as we do this:
+-        # - touch -d @0 file sets the modified time to 0
+-        # - --owner=root:root sets user and group values to 0:0
+-        # - --reproducible creates reproducible archives with consistent inodes and device numbering
++        # NOTE: cargo-fel4 currently relies on this command not failing if the input
++        # file does not exist in order to post-build invocations to work.
++        # The upstream logic now invokes additional meta-data reproducibility commands
++        # which fail when the input file doesn't exist.
++        # As a result we have reverted the command.
+         list(APPEND commands
+-            "bash;-c;cd `dirname ${file}` && mkdir -p temp && cd temp && cp -a ${file} . && touch -d @0 `basename ${file}` && echo `basename ${file}` | cpio ${append} ${reproducible_flag} --owner=root:root --quiet -o -H newc --file=${CMAKE_CURRENT_BINARY_DIR}/archive.${output_name}.cpio && rm `basename ${file}` && cd ../ && rmdir temp;&&"
++            "bash;-c;cd `dirname ${file}` && echo `basename ${file}` | cpio ${append} --quiet -o -H    newc --file=${CMAKE_CURRENT_BINARY_DIR}/archive.${output_name}.cpio;&&"
+         )
+         set(append "--append")
+     endforeach()

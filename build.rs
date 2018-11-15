@@ -13,6 +13,7 @@ use fel4_config::{Fel4Config, SupportedPlatform, SupportedTarget};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
+use std::process::Command;
 
 struct BindgenHeaderIncludeConfig {
     kernel_arch: String,
@@ -22,6 +23,12 @@ struct BindgenHeaderIncludeConfig {
 }
 
 fn main() {
+    // TODO - need to fork/fix sel4_tools to undo this
+    Command::new("./scripts/apply-patches")
+        .output()
+        .expect("Failed to run seL4_tools patch script");
+    println!("cargo:rerun-if-changed=deps/seL4_tools/cmake-tool/common.cmake");
+
     // Resolve fel4 configuration from the manifest located via FEL4_MANIFEST_PATH
     // and PROFILE env-vars
     let (fel4_manifest_path, build_profile) = match fel4_config::infer_manifest_location_from_env()
@@ -150,10 +157,13 @@ fn copy_artifacts(artifact_path: PathBuf, output_path: PathBuf) {
         output_path.join("kernel"),
     ).unwrap();
 
-    fs::copy(
-        artifact_path.join("build").join("simulate"),
-        output_path.join("simulate"),
-    ).unwrap();
+    // Doesn't always get generated anymore
+    if artifact_path.join("build").join("simulate").exists() {
+        fs::copy(
+            artifact_path.join("build").join("simulate"),
+            output_path.join("simulate"),
+        ).unwrap();
+    }
 
     fs::copy(
         artifact_path.join("build").join("CMakeCache.txt"),
@@ -244,6 +254,11 @@ fn get_bindgen_include_config(fel4: &Fel4Config) -> BindgenHeaderIncludeConfig {
                     t.full_name(),
                     p.full_name()
                 ),
+                p @ &SupportedPlatform::Rpi3 => panic!(
+                    "{} target is not supported in combination with {} platform",
+                    t.full_name(),
+                    p.full_name()
+                ),
                 &SupportedPlatform::Sabre => "imx6",
             };
             BindgenHeaderIncludeConfig {
@@ -252,12 +267,22 @@ fn get_bindgen_include_config(fel4: &Fel4Config) -> BindgenHeaderIncludeConfig {
                 width: String::from("32"),
                 platform: plat_include_dir.to_string(),
             }
-        }
-        &SupportedTarget::Aarch64Sel4Fel4 => BindgenHeaderIncludeConfig {
-            kernel_arch: String::from("arm"),
-            kernel_sel4_arch: String::from("aarch64"),
-            width: String::from("64"),
-            platform: fel4.platform.full_name().to_string(),
+        },
+        t @ &SupportedTarget::Aarch64Sel4Fel4 => {
+            let plat_include_dir = match &fel4.platform {
+                &SupportedPlatform::Tx1 => "tx1",
+                &SupportedPlatform::Rpi3 => "bcm2837",
+                p @ _ => panic!("{} target is not supported in combination with {} platform",
+                    t.full_name(),
+                    p.full_name()),
+            };
+
+            BindgenHeaderIncludeConfig {
+                kernel_arch: String::from("arm"),
+                kernel_sel4_arch: String::from("aarch64"),
+                width: String::from("64"),
+                platform: plat_include_dir.to_string(),
+            }
         },
     }
 }

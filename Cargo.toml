@@ -20,4 +20,6 @@ rlibc = "1.0"
 [build-dependencies]
 cmake = "0.1"
 bindgen = { version = "0.35", default-features = false }
-fel4-config = "0.3"
+#fel4-config = "0.3"
+# Using my fork for testing
+fel4-config = { git = "https://github.com/jonlamb-gh/fel4-config.git", branch = "add-rpi3-support" }

@@ -21,10 +21,13 @@ if(KernelArchARM AND KernelSel4ArchAarch64 AND KernelPlatformTx1)
     set_property(TARGET elfloader PROPERTY COMPILE_OPTIONS "-ffreestanding;-mgeneral-regs-only")
 endif()
 
-ApplyData61ElfLoaderSettings()
+# We are using the elfloader-tool on ARM platforms to bootstrap the system
+if(KernelArchARM)
+    ApplyData61ElfLoaderSettings(${KernelARMPlatform} ${KernelArmSel4Arch})
+endif()
 
 if(BuildWithCommonSimulationSettings)
-    ApplyCommonSimulationSettings()
+    ApplyCommonSimulationSettings(${KernelArch})
     GenerateSimulateScript()
 endif(BuildWithCommonSimulationSettings)
 
