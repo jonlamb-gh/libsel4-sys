@@ -147,7 +147,6 @@ KernelRootCNodeSizeBits = 19
 KernelMaxNumBootinfoUntypedCaps = 230
 KernelDebugDisableBranchPrediction = false
 KernelFPUMaxRestoresSinceSwitch = 64
-KernelIPCBufferLocation = "threadID_register"
 KernelMaxNumWorkUnitsPerPreemption = 100
 LinkPageSize = 4096
 UserLinkerGCSections = false
@@ -165,3 +164,7 @@ KernelPrinting = false
 [aarch64-sel4-fel4.tx1]
 KernelARMPlatform = "tx1"
 ElfloaderImage = "binary"
+
+[aarch64-sel4-fel4.rpi3]
+KernelARMPlatform = "rpi3"
+ElfloaderImage = "elf"
