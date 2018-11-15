@@ -167,4 +167,4 @@ ElfloaderImage = "binary"
 
 [aarch64-sel4-fel4.rpi3]
 KernelARMPlatform = "rpi3"
-ElfloaderImage = "elf"
+ElfloaderImage = "binary"
