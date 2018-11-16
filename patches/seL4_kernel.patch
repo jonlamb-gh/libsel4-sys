@@ -27,14 +27,15 @@ index 96f07c2..7310ebd 100644
  #define SDHC_PADDR                  (SDHC_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
  #define USB2_PADDR                  (USB2_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
 diff --git a/include/plat/bcm2837/plat/machine/hardware.h b/include/plat/bcm2837/plat/machine/hardware.h
-index 1eb168b..f1d330e 100644
+index 1eb168b..09d6dd1 100644
 --- a/include/plat/bcm2837/plat/machine/hardware.h
 +++ b/include/plat/bcm2837/plat/machine/hardware.h
-@@ -56,6 +56,11 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
+@@ -56,6 +56,12 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
  };
  
  const p_region_t BOOT_RODATA dev_p_regs[] = {
-+    { /* .start */ VC_MBOX_PADDR  , /* .end */ VC_MBOX_PADDR   + (1u << PAGE_BITS) },
++    /* Adding the int. controller since the VC mailbox is in that frame */
++    { /* .start */ INTC_PADDR     , /* .end */ INTC_PADDR      + (1u << PAGE_BITS) },
 +    { /* .start */ PM_PADDR       , /* .end */ PM_PADDR        + (1u << PAGE_BITS) },
 +    { /* .start */ RNG_PADDR      , /* .end */ RNG_PADDR       + (1u << PAGE_BITS) },
 +    { /* .start */ GPIO_PADDR     , /* .end */ GPIO_PADDR      + (1u << PAGE_BITS) },
