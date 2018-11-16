@@ -9,4 +9,10 @@ echo "Patching seL4_tools"
 git apply ../../patches/seL4_tools.patch
 popd
 
+pushd deps/seL4_kernel/
+echo "Patching seL4_kernel"
+git apply ../../patches/seL4_kernel.patch
+popd
+
+
 exit 0
