@@ -150,6 +150,9 @@ KernelFPUMaxRestoresSinceSwitch = 64
 KernelMaxNumWorkUnitsPerPreemption = 100
 LinkPageSize = 4096
 UserLinkerGCSections = false
+KernelDebugDisableL2Cache = false
+KernelDebugDisableL1DCache = false
+KernelDebugDisableL1ICache = false
 
 [aarch64-sel4-fel4.debug]
 KernelDebugBuild = true
