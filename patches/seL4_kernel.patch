@@ -1,5 +1,5 @@
 diff --git a/include/plat/bcm2837/plat/machine/devices.h b/include/plat/bcm2837/plat/machine/devices.h
-index 96f07c2..7310ebd 100644
+index 96f07c2..3816df0 100644
 --- a/include/plat/bcm2837/plat/machine/devices.h
 +++ b/include/plat/bcm2837/plat/machine/devices.h
 @@ -18,6 +18,11 @@
@@ -14,7 +14,14 @@ index 96f07c2..7310ebd 100644
  #define UART_BUSADDR                0x7E215000
  #define SDHC_BUSADDR                0x7E300000
  #define USB2_BUSADDR                0x7E980000
-@@ -29,6 +34,11 @@
+@@ -26,9 +31,18 @@
+ 
+ #define ARM_LOCAL_PADDR             0x40000000
+ 
++/* Additional memory outside the kernel window that we export as a device */
++#define EXTRA_RAM_START 0x3C000000
++#define EXTRA_RAM_END 0x3F000000
++
  /* We convert from the VC CPU BUS addresses to ARM Physical addresses due to the extra
      VC (Video controller) MMU */
  #define INTC_PADDR                  (INTC_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
@@ -27,13 +34,14 @@ index 96f07c2..7310ebd 100644
  #define SDHC_PADDR                  (SDHC_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
  #define USB2_PADDR                  (USB2_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
 diff --git a/include/plat/bcm2837/plat/machine/hardware.h b/include/plat/bcm2837/plat/machine/hardware.h
-index 1eb168b..09d6dd1 100644
+index 1eb168b..931aa8d 100644
 --- a/include/plat/bcm2837/plat/machine/hardware.h
 +++ b/include/plat/bcm2837/plat/machine/hardware.h
-@@ -56,6 +56,12 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
+@@ -56,6 +56,13 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
  };
  
  const p_region_t BOOT_RODATA dev_p_regs[] = {
++    { /* .start */ EXTRA_RAM_START, /* .end */ EXTRA_RAM_END },
 +    /* Adding the int. controller since the VC mailbox is in that frame */
 +    { /* .start */ INTC_PADDR     , /* .end */ INTC_PADDR      + (1u << PAGE_BITS) },
 +    { /* .start */ PM_PADDR       , /* .end */ PM_PADDR        + (1u << PAGE_BITS) },
