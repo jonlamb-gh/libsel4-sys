@@ -1,8 +1,8 @@
 diff --git a/include/plat/bcm2837/plat/machine/devices.h b/include/plat/bcm2837/plat/machine/devices.h
-index 96f07c24..af889050 100644
+index 96f07c2..68983eb 100644
 --- a/include/plat/bcm2837/plat/machine/devices.h
 +++ b/include/plat/bcm2837/plat/machine/devices.h
-@@ -18,20 +18,36 @@
+@@ -18,20 +18,38 @@
  #define PADDR_OFFSET                0x3F000000
  
  #define INTC_BUSADDR                0x7E00B000
@@ -11,6 +11,7 @@ index 96f07c24..af889050 100644
 +#define RNG_BUSADDR                 0x7E104000
 +#define GPIO_BUSADDR                0x7E200000
 +#define UART0_BUSADDR               0x7E201000
++#define SPI0_BUSADDR                0x7E204000
  #define UART_BUSADDR                0x7E215000
  #define SDHC_BUSADDR                0x7E300000
  #define USB2_BUSADDR                0x7E980000
@@ -32,6 +33,7 @@ index 96f07c24..af889050 100644
 +#define RNG_PADDR                   (RNG_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
 +#define GPIO_PADDR                  (GPIO_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
 +#define UART0_PADDR                 (UART0_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
++#define SPI0_PADDR                  (SPI0_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
  #define UART_PADDR                  (UART_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
  #define SDHC_PADDR                  (SDHC_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
  #define USB2_PADDR                  (USB2_BUSADDR-BUS_ADDR_OFFSET+PADDR_OFFSET)
@@ -40,10 +42,10 @@ index 96f07c24..af889050 100644
  
  #endif /* !__PLAT_MACHINE_DEVICES_H */
 diff --git a/include/plat/bcm2837/plat/machine/hardware.h b/include/plat/bcm2837/plat/machine/hardware.h
-index 1eb168b3..f63cf86f 100644
+index 1eb168b..f5cdde0 100644
 --- a/include/plat/bcm2837/plat/machine/hardware.h
 +++ b/include/plat/bcm2837/plat/machine/hardware.h
-@@ -56,10 +56,18 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
+@@ -56,10 +56,19 @@ const p_region_t BOOT_RODATA avail_p_regs[] = {
  };
  
  const p_region_t BOOT_RODATA dev_p_regs[] = {
@@ -54,6 +56,7 @@ index 1eb168b3..f63cf86f 100644
 +    { /* .start */ RNG_PADDR      , /* .end */ RNG_PADDR       + (1u << PAGE_BITS) },
 +    { /* .start */ GPIO_PADDR     , /* .end */ GPIO_PADDR      + (1u << PAGE_BITS) },
 +    { /* .start */ UART0_PADDR    , /* .end */ UART0_PADDR     + (1u << PAGE_BITS) },
++    { /* .start */ SPI0_PADDR     , /* .end */ SPI0_PADDR      + (1u << PAGE_BITS) },
      { /* .start */ SDHC_PADDR     , /* .end */ SDHC_PADDR      + (1u << PAGE_BITS) },
      { /* .start */ USB2_PADDR     , /* .end */ USB2_PADDR      + (1u << PAGE_BITS) },
      { /* .start */ UART_PADDR     , /* .end */ UART_PADDR      + (1u << PAGE_BITS) },
